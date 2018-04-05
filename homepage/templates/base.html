@@ -110,43 +110,11 @@
             </li>
         </ul>
     </div> -->
-
-    <div class="parallax-container">
-      <div class="parallax"><img src="{% static '/homepage/pexels-photo.jpg' %}" style="width:100%"></div>
-      <a href="/" style="display:inline-block;"><div style="width:280px;height:75px;border:solid;margin-top:300px;margin-left:65%;text-align:center;position:absolute;"><h3 style="line-height:.35;">Learn More</h3></div></a>
-    </div>
-    <div class="section white">
-      <div class="row container">
-        <h2 class="header">Targeted Advertising</h2>
-        <p class="grey-text text-darken-3 lighten-3">Have you ever shopped online for something, only to browse to a new website and find an advertisement for the exact product you were just viewing? You may wonder how exactly does this completely separate website know what you were looking at. If advertisers know your shopping habits, what else do they know about you?</p>
-      </div>
-    </div>
-    <div class="parallax-container">
-      <div class="parallax"><img src="{% static '/homepage/pexels-photo.jpg' %}" style="width:100%"></div>
-    </div>
-    <!-- <div class="parallax-container">
-      <div class="parallax"><img src="{% static 'pexels-photo.jpg' %}"></div>
-    </div> -->
+    {% block content %}
 
 
 
-<script type="text/javascript">
-    var elem = document.querySelector('.parallax');
-    var instance = M.Parallax.getInstance(elem);
-
-    $(document).ready(function(){
-        console.log('ready');
-        $('.parallax').parallax();
-    });
-
-
-    var path_logout = "{% static "exit.json" %}"
-    var path_dashboard = "{% static "dashboard.json" %}"
-    var path_profile = "{% static "profile.json" %}"
-    var path_checkmark = "{% static "checkmark.json" %}"
-    var path_play = "{% static "play.json" %}"
-    var path_cog = "{% static "cog.json" %}"
-</script>
+    {% endblock content %}
 <!-- <script type="text/javascript" src="{% static "main.js" %}"></script>
 <script type="text/javascript" src="{% static "lottie.js" %}"></script>
 <script type="text/javascript" src="{% static "animation.js" %}"></script> -->
