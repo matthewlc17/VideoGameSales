@@ -9,7 +9,13 @@
     <div class="section white">
       <div class="row container">
         <h2 class="header">Input Your Video Game Information</h2>
-        <p class="grey-text text-darken-3 lighten-3">{{form}}</p>
+        <p class="grey-text text-darken-3 lighten-3">
+            <form class="" action="/homepage/landingpage/" method="post">
+                {% csrf_token %}
+                {{form}}
+                <input class="btn btn-success" value="Save" type="submit"></input>
+            </form>
+        </p>
       </div>
     </div>
     <div class="parallax-container">
