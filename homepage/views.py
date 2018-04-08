@@ -8,6 +8,9 @@ from django.contrib.auth.decorators import login_required
 from datetime import datetime
 from django.core.mail import send_mail
 from django.template.loader import render_to_string, get_template
+import json
+import requests
+import urllib
 
 # Create your views here.
 def landingpage(request):
@@ -16,22 +19,88 @@ def landingpage(request):
         form = VideoGameForm(request.POST, request=request)
         if form.is_valid():
             form.commit()
+            form_data = form.cleaned_data
+            platform = form_data['Platform']
+            score = form_data['score']
+            month = form_data['release_month']
+            data =  {
 
-            return HttpResponseRedirect('/homepage/landingpage/')
+                "Inputs": {
+
+                        "input1":
+                        {
+                            "ColumnNames": ["Global_Sales", "Platform", "score", "release_month"],
+                            "Values": [ [ 0, platform, score, month ] ]
+                        },        },
+                    "GlobalParameters": {
+                }
+            }
+
+            body = str.encode(json.dumps(data))
+            url = 'https://ussouthcentral.services.azureml.net/workspaces/60d9ae6f14a8478e917edaf7323b8f9b/services/907f6ca8aa194aeba872b117b60aaf93/execute?api-version=2.0&details=true'
+            api_key = 'SR8izCipUlM1tAkNM3ejqEaVNV4qso+Khy90lhlucy3XJWKEM28jSbFZlDHQmm4K44hsPfgTrDK6PI8qLweUig=='
+            headers = {'Content-Type':'application/json', 'Authorization':('Bearer '+ api_key)}
+            req = urllib.request.Request(url, body, headers)
+            try:
+                response = urllib.request.urlopen(req)
+
+                result = response.read()
+                resultDict = json.loads(result)
+                predicted_sales = str(resultDict['Results']['output1']['value']['Values'][0][4])
+
+                print(resultDict)
+                print(predicted_sales)
+
+                # retweetCount = str(resultDict['Results']['output1']['value']['Values'][0][0])
+                # count = round(float(retweetCount))
+                # retweetCountRounded = count
+
+                # print(retweetCount)
+
+            except urllib.request.HTTPError as error:
+                print("The request failed with status code: " + str(error.code))
+                print(error.info())
+                print(json.loads(error.read()))
+
+            # return HttpResponseRedirect('/')
     else:
         form = VideoGameForm(request=request)
+        predicted_sales = None
     context = {
         'form': form,
+        'predicted_sales': predicted_sales,
     }
 
-    return render(request, 'homepage/landingpage.html', context)
+    return render(request, 'homepage/index.html', context)
 
 class VideoGameForm(forms.Form):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super(VideoGameForm, self).__init__(*args, **kwargs)
 
-        self.fields['first_name'] = forms.CharField(label="First Name", required=True, max_length=100, widget=forms.TextInput(attrs={'placeholder':'First Name', 'class':'form-control'}))
+        PLATFORM_CHOICES = (
+            ('XOne','Xbox One'),
+            ('PS4','Playstation 4'),
+            ('PC', 'PC'),
+        )
+        MONTH_CHOICES = (
+            ('1', 'January'),
+            ('2', 'February'),
+            ('3', 'March'),
+            ('4', 'April'),
+            ('5', 'May'),
+            ('6', 'June'),
+            ('7', 'July'),
+            ('8', 'August'),
+            ('9', 'September'),
+            ('10', 'October'),
+            ('11', 'November'),
+            ('12', 'December'),
+        )
+
+        self.fields['score'] = forms.CharField(label="Score", required=True, max_length=2, widget=forms.NumberInput(attrs={'placeholder':'Score', 'class':'form-control','style':'text-align:center;'}))
+        self.fields['Platform'] = forms.ChoiceField(label="Platform", required=True, choices=PLATFORM_CHOICES, widget=forms.Select(attrs={'placeholder':'Score', 'class':'form-control'}))
+        self.fields['release_month'] = forms.ChoiceField(label="Release Month", required=True, choices=MONTH_CHOICES, widget=forms.Select(attrs={'placeholder':'Score', 'class':'form-control'}))
 
     def clean(self):
         cleaned_data = super().clean()

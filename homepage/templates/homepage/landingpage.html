@@ -10,17 +10,18 @@
       <div class="row container">
         <h2 class="header">Input Your Video Game Information</h2>
         <p class="grey-text text-darken-3 lighten-3">
-            <form class="" action="/homepage/landingpage/" method="post">
-                {% csrf_token %}
-                {{form}}
-                <input class="btn btn-success" value="Save" type="submit"></input>
-            </form>
+
         </p>
       </div>
     </div>
     <div class="parallax-container">
       <div class="parallax"><img src="{% static '/homepage/pexels-photo.jpg' %}" style="width:100%"></div>
     </div>
+    <form class="" action="/homepage/landingpage/" method="post">
+        {% csrf_token %}
+        {{form}}
+        <input class="btn btn-success" value="Save" type="submit"></input>
+    </form>
     <!-- <div class="parallax-container">
       <div class="parallax"><img src="{% static 'pexels-photo.jpg' %}"></div>
     </div> -->
@@ -34,6 +35,7 @@
     $(document).ready(function(){
         console.log('ready');
         $('.parallax').parallax();
+        $('select').material_select();
     });
     </script>
 {% endblock content %}

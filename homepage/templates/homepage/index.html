@@ -1,0 +1,111 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{% block title %}Home{% endblock title %} | VideoGameSales</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+
+    <!-- Materialize Compiled and minified CSS -->
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css"> -->
+    <!-- <link href="{% static '/homepage/materialize.min.css' %}" rel="stylesheet" type="text/css"> -->
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <!-- Materialize Compiled and minified JavaScript -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script> -->
+    <!-- <script src="{% static '/homepage/materialize.min.js' %}"></script> -->
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <!-- <link href="{% static 'main.css' %}" rel="stylesheet" type="text/css"> -->
+
+    {% block resources %}
+    {% endblock resources %}
+
+    <!-- favicon -->
+    <!-- <link rel="icon" type="image/png" sizes="32x32" href="{% static '' %}"> -->
+
+    <!-- animation package -->
+    <!-- <link href="https://cdn.rawgit.com/michalsnik/aos/2.1.1/dist/aos.css" rel="stylesheet">
+    <script src="https://cdn.rawgit.com/michalsnik/aos/2.1.1/dist/aos.js"></script> -->
+    <script src="https://use.fontawesome.com/e32a5ff2e3.js"></script>
+
+    <!-- bootstrap js -->
+    <script type="text/javascript" src="https://cdn.rawgit.com/kimmobrunfeldt/progressbar.js/0.6.1/dist/progressbar.js"></script>
+
+    <!-- <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+
+    <meta property="og:url"           content="" />
+    <meta property="og:type"          content="website" />
+    <meta property="og:title"         content="VideoGameSales" />
+    <meta property="og:description"   content="Let's predict some video game sales!" />
+    <meta property="og:image"         content="" />
+
+</head>
+<body id="body-account">
+        <header>
+            <nav class="navbar navbar-toggleable-md navbar-light bg-faded" style="box-shadow:none;">
+                <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+                <a class="navbar-brand" href="/">
+                    <img src="" width="30" height="30" class="" alt="">
+                    VideoGameSalesPredictor&reg; <span style="font-size: 60%; font-family:sans-serif;">by Sam, Joseph, Mark, Matt</span>
+                </a>
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                  <div class="navbar-nav ml-auto">
+                    <a class="nav-item nav-link active" href="/">Home <span class="sr-only">(current)</span></a>
+                    <!-- <a class="nav-item nav-link" href="/team">Our Team</a>
+                    <a class="nav-item nav-link" href="/data">The Data</a> -->
+                  </div>
+                </div>
+              </nav>
+        </header>
+        <div class="offset-md-3 col-md-6 text-center">
+            <h2 class="header" style="margin-top:15%;">Input Your Video Game Information</h2>
+            <hr />
+            <form class="" action="/" method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-12 input-label">
+                        {{form.score.errors}}
+                        <label for="{{form.score.id_for_label}}">Score</label>
+                        <div class="input-group">
+                        {{form.score}}
+                        </div>
+                        <br>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 input-label">
+                        <label for="{{form.Platform.id_for_label}}">Platform</label>
+                        <div class="input-group">
+                        {{form.Platform}}
+                        </div>
+                        <br>
+                    </div>
+                    <div class="col-md-6 input-label">
+                        <label for="{{form.release_month.id_for_label}}">Platform</label>
+                        <div class="input-group">
+                        {{form.release_month}}
+                        </div>
+                        <br>
+                    </div>
+                </div>
+                <input class="btn btn-success" value="Save" type="submit"></input>
+            </form>
+            <hr />
+            {% if predicted_sales is not None %}
+                <h1>Predicted Sales: {{predicted_sales}}</h1>
+            {% endif %}
+        </div>
+</body>
