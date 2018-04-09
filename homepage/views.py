@@ -21,7 +21,7 @@ def landingpage(request):
         if form.is_valid():
             form_data = form.cleaned_data
             platform = form_data['Platform']
-            score = form_data['score']
+            score = str(form_data['score'])
             month = form_data['release_month']
             data =  {
 
@@ -102,7 +102,7 @@ class VideoGameForm(forms.Form):
             ('Dec', 'December'),
         )
 
-        self.fields['score'] = forms.CharField(label="Score", required=True, max_length=2, widget=forms.NumberInput(attrs={'placeholder':'Score', 'class':'form-control','style':'text-align:center;'}))
+        self.fields['score'] = forms.DecimalField(label="Score", required=True, widget=forms.NumberInput(attrs={'placeholder':'Score', 'class':'form-control','style':'text-align:center;'}))
         self.fields['Platform'] = forms.ChoiceField(label="Platform", required=True, choices=PLATFORM_CHOICES, widget=forms.Select(attrs={'placeholder':'Score', 'class':'form-control','style':'text-align:center;'}))
         self.fields['release_month'] = forms.ChoiceField(label="Release Month", required=True, choices=MONTH_CHOICES, widget=forms.Select(attrs={'placeholder':'Score', 'class':'form-control','style':'text-align:center;'}))
 
