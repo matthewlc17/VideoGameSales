@@ -19,7 +19,6 @@ def landingpage(request):
     if request.method == 'POST':
         form = VideoGameForm(request.POST, request=request)
         if form.is_valid():
-            form.commit()
             form_data = form.cleaned_data
             platform = form_data['Platform']
             score = form_data['score']
@@ -114,8 +113,3 @@ class VideoGameForm(forms.Form):
             self._errors['score'] = self.error_class(['Score must not be greater than 10'])
         elif Decimal(self.cleaned_data.get('score')) < 0:
             self._errors['score'] = self.error_class(['Score must not be less than 0'])
-
-        pass
-
-    def commit(self):
-        pass
