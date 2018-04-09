@@ -46,7 +46,7 @@ def landingpage(request):
 
                 result = response.read()
                 resultDict = json.loads(result)
-                predicted_sales = round(Decimal(resultDict['Results']['output1']['value']['Values'][0][4]),2)
+                predicted_sales = round(Decimal(resultDict['Results']['output1']['value']['Values'][0][0]),2)
 
                 predicted_sales = "{:,}".format(predicted_sales)
 
