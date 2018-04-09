@@ -11,6 +11,7 @@ from django.template.loader import render_to_string, get_template
 import json
 import requests
 import urllib
+from decimal import Decimal
 
 # Create your views here.
 def landingpage(request):
@@ -46,7 +47,9 @@ def landingpage(request):
 
                 result = response.read()
                 resultDict = json.loads(result)
-                predicted_sales = str(resultDict['Results']['output1']['value']['Values'][0][4])
+                predicted_sales = round(Decimal(resultDict['Results']['output1']['value']['Values'][0][4]),2)
+
+                predicted_sales = "{:,}".format(predicted_sales)
 
                 print(resultDict)
                 print(predicted_sales)
@@ -63,6 +66,8 @@ def landingpage(request):
                 print(json.loads(error.read()))
 
             # return HttpResponseRedirect('/')
+        else:
+            predicted_sales = None
     else:
         form = VideoGameForm(request=request)
         predicted_sales = None
@@ -84,26 +89,31 @@ class VideoGameForm(forms.Form):
             ('PC', 'PC'),
         )
         MONTH_CHOICES = (
-            ('1', 'January'),
-            ('2', 'February'),
-            ('3', 'March'),
-            ('4', 'April'),
-            ('5', 'May'),
-            ('6', 'June'),
-            ('7', 'July'),
-            ('8', 'August'),
-            ('9', 'September'),
-            ('10', 'October'),
-            ('11', 'November'),
-            ('12', 'December'),
+            ('Jan', 'January'),
+            ('Feb', 'February'),
+            ('Mar', 'March'),
+            ('Apr', 'April'),
+            ('May', 'May'),
+            ('Jun', 'June'),
+            ('Jul', 'July'),
+            ('Aug', 'August'),
+            ('Sep', 'September'),
+            ('Oct', 'October'),
+            ('Nov', 'November'),
+            ('Dec', 'December'),
         )
 
         self.fields['score'] = forms.CharField(label="Score", required=True, max_length=2, widget=forms.NumberInput(attrs={'placeholder':'Score', 'class':'form-control','style':'text-align:center;'}))
-        self.fields['Platform'] = forms.ChoiceField(label="Platform", required=True, choices=PLATFORM_CHOICES, widget=forms.Select(attrs={'placeholder':'Score', 'class':'form-control'}))
-        self.fields['release_month'] = forms.ChoiceField(label="Release Month", required=True, choices=MONTH_CHOICES, widget=forms.Select(attrs={'placeholder':'Score', 'class':'form-control'}))
+        self.fields['Platform'] = forms.ChoiceField(label="Platform", required=True, choices=PLATFORM_CHOICES, widget=forms.Select(attrs={'placeholder':'Score', 'class':'form-control','style':'text-align:center;'}))
+        self.fields['release_month'] = forms.ChoiceField(label="Release Month", required=True, choices=MONTH_CHOICES, widget=forms.Select(attrs={'placeholder':'Score', 'class':'form-control','style':'text-align:center;'}))
 
     def clean(self):
         cleaned_data = super().clean()
+
+        if Decimal(self.cleaned_data.get('score')) > 10:
+            self._errors['score'] = self.error_class(['Score must not be greater than 10'])
+        elif Decimal(self.cleaned_data.get('score')) < 0:
+            self._errors['score'] = self.error_class(['Score must not be less than 0'])
 
         pass
 
